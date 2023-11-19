@@ -1,0 +1,14 @@
+Balanced tree
+    rotation cases
+    BST on disk impacts data locality as new child node could be far from parent
+    disk DS tree needs :: high fanout (no of child nodes) , low height (reduce seeks)
+
+Hard disk drives: Head position - > sector 
+Solid State drives: memory cells -> strings ->arrays -> pages-> block (planes placed on die)
+
+                        B+ tree root
+                     K5       K17      K 33
+                K1-K5    K5-K17    K17-K33    K 33+
+        Leaf node :data ........................................
+
+        Leaf node can have sibling pointers(or dbl pointers) for easier range scans

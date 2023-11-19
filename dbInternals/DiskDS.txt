@@ -1,0 +1,19 @@
+CurationTargets are like disks based storage
+Campaigns , Role Guides are like virtual memory that we expose to application developers
+While we spcify offsets inside target file we specify cohorts in CurationTargets and then interpret 
+
+Design on-disk structures
+    -take care of GC n fragmentation ourselves
+    -Serialization n deserilaztion
+    -create effiecient page layout on disk with read() n write() instead of malloc()
+
+Bitwise operator
+    Set the bit use | and <<(bitshift)
+    unset the bit usr & ~ n then <<
+    test bit & or <<
+
+Principles
+    Use same size pages for read/write to file (header,page1...page n,trailer)
+    pages can be single block or mulipte contingous blocks for data
+    flush page from memory to disk when full 
+    Page checksums (like CRC for multibit soft err check) written and when read computed to match

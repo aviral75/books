@@ -1,0 +1,49 @@
+Page cache server
+    stages state change in main memory
+    caches page not yet synced with persistent storage 
+    Pinning is locking some pages in cache (freq accessed one like top of B tree)
+
+Log Manager
+    holds history of operations applied to not yey synced cached pages
+    helps with durability to reapply the changes on case of crash
+
+Concurrency control(CC)
+    Optimistic CC: tx goes on and histories of operation frecorded to see if a conflict prior to commit
+        Read Phase : execute tx to get Read and write set 
+        Validation Phase: check for conflicts , restart read phase if data changed, 
+                          check T1 T2 read write time and data set intersection
+        Write Phase: commit if no validation issues ,happens atomic for all alonside validation phase
+    MultiVersion CC: can use lockless techniques based on tikestamp versioning
+    Pessimistic CC: block on tx ,can lead to deadlock
+                    uses read,write max_value to check stale or not and allow or not
+    Lock Based CC: Pessimistic with locks , 2phase locking (grow n shrink locks)
+                   Locks on key at logical level managed by db lock mgr.
+                   Latches on leaf node physical representation on page level, even lockless use latches.
+
+B link trees use child and sibling pointers
+    This enables to support half split stage child pointer not yet set buit sibling is
+    This reduces no of locks held by the tree.
+
+Node local CC (not distributed)
+    Schedule (collection of tx)
+    Searializable -> if all tx execute without vioolating ACID props.
+    Isolation Levels: parts of tx become visible (how n when)
+        Read Anomalies: 
+            Dirty read: uncommied tx update is read
+            Non-repetable read:read before and after commit of another tx hence diff values
+            Phantom read: similar to above but for range of rows read
+        Write Anomalies:
+            Lost Update: T1 T2 both read same update diff values.
+            Dirty Write: Writes on top of uncommitted read value
+            Write skew: T1 T2 together Read and then write to break constraints
+    
+    Read Uncomitted: allows dirty read
+    Read comitted: blocks dirty read but not non repeatable or phantom
+    Repeatable read: blocks dirty and non repeatable but not phantom
+    Serializable: none allowed
+
+    Snapshot isolation: takes a snapshot makes changes on top but only commits if values didnt change during execution of this tx.
+        Lost update if more tx try on same the aborted ones can retry
+        Write skew still possible as two tx can individually be ok but break invariant constraints together.
+
+

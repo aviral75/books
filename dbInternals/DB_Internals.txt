@@ -1,0 +1,73 @@
+DB Internals
+    Storage Engine
+    Data Distribution
+        Eventual consistency
+            Anti entropy for convergence
+            gossip approaches for data dissemination
+
+    Query Planning
+    Query Optimization
+    Scheduling
+
+
+DB selectiomn params:
+    Schema n record sizes
+    number of clients
+    typical query and access patterns
+    read write rate
+
+
+Databases
+    Transport layer :: accept request
+    Query Processor :: Optimization for query execution
+    execution Engine :: carrying out opperations
+    Storage Engine
+        /transaction mgr : run transaction
+        /lock mgr :: lock on db object
+        /Buffer mgr : data page in memory
+        /Recovery mgr :: operation log
+        /access methods :: heap/B tree/ LSM trr
+
+Disk programmming challenges
+    Manage data references
+    Serialization
+    Freed memory
+    Fragmentation
+    Future tech :: Non Volatile Memory (NVM)
+
+Memory based DB recovery
+  /backup copy :: sorted set on disk , 
+                  modified asyc in batch
+                  backup holds db snapshot after log batch , letting log content to this time to be discadrded
+                  this process is called checkpointing
+                  recovery time reduced as log is updated and async update to backup
+  /sequential log : results of operation => log records to backup in batches
+
+  Spatial Locality:
+    Memory location access => nearby memory locations will be accessed in near future
+      good if we update/access mutiple person like record and stored row oriented db
+      better use column based for a particular field like phonenumber for all being accessed
+
+Wide Column stores
+  Ex: BigTable, HBase
+  MultiDimensional map
+  Column family :: data stored row-wise like H2R
+   Root
+      ColFamily1  : attr1,attr2...
+      ColFamily2 : a1,a2,...
+      ...
+
+DB storage:
+  Files mostly tables as  data files and index files
+  Index files : containig metadata from fewer columns for faster access of data files
+  Files partitioned into pages to map disk blocks sizes
+  Deletion using deletion markers (tombstones)
+  Data Files:
+    Index organised tables :: key order ,range scan sis sequential
+    Heap organised tables :: write order , need additional index structures for search 
+    Hash organised tables :: bucket to hash and within bucket append order or sort order
+  Index Files:
+    Clustered Index: key order , data reocrds same file or cluster
+
+
+    
